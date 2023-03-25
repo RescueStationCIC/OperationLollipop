@@ -34,8 +34,27 @@ I get a password prompt, and then I'm in :-)
 ### MS VS Code
 I've downloaded VS Code onto my Mac. Then I set it up to work on a remote machine, via SSH, by installing Microsoft's Remote Extension pack, from within VS Code.
 
-### Download this repo directly to the Pi
-Right now, I'm working out whether I need to jump through some hoops to get VSCode to use git remotely (preferred), or to accept defeat install git remotely on the Pi, and just use it via the command line...
+### Git
+#### Install on the RPi
+You'll need to install git on the RPi:
+
+```bash
+apt update
+```
+
+```bash
+apt install git
+```
+### Fork this repo
+You'll need to create an account on GitHub, if you haven't already, and Fork this repository, so a linked copy of it appears in your account.
+
+### Download the repo
+
+
+
+
+
+
 
 
 
