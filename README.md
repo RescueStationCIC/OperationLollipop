@@ -84,9 +84,19 @@ git config --global user.email coopsatwork@users.noreply.github.com
 2. Open the remote project in VS Code 
 When you start VS Code, look for the green >< in the bottom left corner. This will help you log into the RPi.  
 VSCode will give you the option to Open A Folder. Browse to your downloaded fork of this project.
-3. Make a change to this file, and attempt to check it back in.
+3. Make a change to this file, and attempt to check it back in, using VS Code
 
+(Here's where it may get a little interesting. Your code is on the RPi. VSCode is running on your desktop computer. Git is running on the RPi. It is used to mange the local respoitory and your code changes. VSCode's Git extension manages your remote connection to GitHub. It will ask you for your authentication. Once you have provided it, The authentication will fail, complaining that this method of authentication was discontinued in 2021. But it still works. Go figure. Anyway..)
 
+---
+
+The upshot is that at this point you should:
+* have downloaded your fork of this repo onto the RPi. 
+* be able to edit this file using VSCode on a remote connection from your desktop to the RPi 
+* be able to check-in your changes to this file, to RPi's local repo using VSCode.
+* be able to sync your changed from the RPi to git hub, using VS Code.  
+
+---
 
 
 
