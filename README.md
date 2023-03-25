@@ -69,10 +69,21 @@ cd ~/projects
 git clone https://github.com/RescueStationCIC/OperationLollipop.git
 
 ### Start your developing
-1 .Open the remote project in VS Code
+1. In the browser, navigate to your GitHub account. In [settings, email address](https://github.com/settings/emails) make sure you have set a PRIVATE email address. This is just so your actual email address isn't made public in your commit comments, if you don't want it to be.
+2. In the RPi terminal, set your github configuration, for the username and email which will be attributed to you when you check in. For example:
+
+```bash
+git config --global user.name coopsatwork
+``` 
+
+```bash
+git config --global user.email coopsatwork@users.noreply.github.com
+```
+
+2. Open the remote project in VS Code 
 When you start VS Code, look for the green >< in the bottom left corner. This will help you log into the RPi.  
 VSCode will give you the option to Open A Folder. Browse to your downloaded fork of this project.
-2. Make a change tothis file, and attempt to check it back in.
+3. Make a change to this file, and attempt to check it back in.
 
 
 
