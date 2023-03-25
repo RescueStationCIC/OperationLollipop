@@ -72,6 +72,7 @@ git clone https://github.com/RescueStationCIC/OperationLollipop.git
 1 .Open the remote project in VS Code
 When you start VS Code, look for the green >< in the bottom left corner. This will help you log into the RPi.  
 VSCode will give you the option to Open A Folder. Browse to your downloaded fork of this project.
+2. Make a change tothis file, and attempt to check it back in.
 
 
 
