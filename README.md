@@ -36,7 +36,8 @@ I've downloaded VS Code onto my Mac. Then I set it up to work on a remote machin
 
 ### Git
 #### Install on the RPi
-You'll need to install git on the RPi:
+You'll need to install git on the RPi.  
+On the RPi terminal:
 
 ```bash
 apt update
@@ -46,12 +47,31 @@ apt update
 apt install git
 ```
 ### Fork this repo
-You'll need to create an account on GitHub, if you haven't already, and Fork this repository, so a linked copy of it appears in your account.
+In your browser, you'll need to create an account on GitHub, if you haven't already, and Fork this repository, so a linked copy of it appears in your account.
 
 ### Download the repo
+On the RPi terminal:
 
+1. create a projects directory:
+```bash
+mkdir -p ~/projects
+```
+2. In the browser, go to your forked project in GitHub. In the **Code** tab, use the 'Code' button to get the HTTPS address of the repository. For example, this one is:
+```bash
+https://github.com/RescueStationCIC/OperationLollipop.git
+```
+3. Clone your repo into the project directory
+For example:
+```bash
+cd ~/projects
+````
+```bash
+git clone https://github.com/RescueStationCIC/OperationLollipop.git
 
-
+### Start your developing
+1 .Open the remote project in VS Code
+When you start VS Code, look for the green >< in the bottom left corner. This will help you log into the RPi.  
+VSCode will give you the option to Open A Folder. Browse to your downloaded fork of this project.
 
 
 
