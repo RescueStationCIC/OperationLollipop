@@ -67,7 +67,7 @@ cd ~/projects
 ````
 ```bash
 git clone https://github.com/RescueStationCIC/OperationLollipop.git
-```ß
+```
 
 ### Start your developing
 1. In the browser, navigate to your GitHub account. In [settings, email address](https://github.com/settings/emails) make sure you have set a PRIVATE email address. This is just so your actual email address isn't made public in your commit comments, if you don't want it to be.
