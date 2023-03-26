@@ -19,6 +19,8 @@ If the battery is allowed to fail, then the Raspberry Pi operation is rudely int
 ## How do we set it up?
 It's really important to get the battery right. Panasonic 18650 3.7V NON-PROTECTED.  
 
+Once connected, we can power from the charger, or the battery pack. This is really important, as it means that whatever happens, we can keep power going to the sensors. Powering them down means that their reactive surface is more likely to become contaminated.
 
 ![Installed UPS](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/ups/photo/IMG_0283.jpeg)
-![works](https://cdn.jsdelivr.net/gh/HeritageHQ/renovationimages/images/st-maries-week-3-021.jpg)
+
+
