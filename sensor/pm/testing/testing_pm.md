@@ -43,17 +43,7 @@ Now I plug it in, and wait for a short to fry the USB controller on my RPi:
 
 ![](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/sensor/pm/photo/IMG_0301.jpeg) 
 
-Presto! The red-light, and celebratory snack, shows no ill-effects! One point for the idiot in with the iron.
-
-
-
-
-
-
-
-
-
-
+Presto! The red-light, and celebratory snack, shows no ill-effects! One point for the idiot with the iron.
 
 
 ```bash
@@ -61,3 +51,15 @@ coops@raspberrypi:~/projects/OperationLollipop/diagnostic $ ./get_usb.sh
 /dev/ttyUSB0 - Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001
 /dev/ttyUSB1 - FTDI_FT232R_USB_UART_A10OEDT2
 ```
+
+# Comms check
+
+We're using [this resource](https://opensource.com/article/20/5/usb-port-raspberry-pi-python), from opensource.com, to find out how Python can be made to connect to the /dev USB devices.
+
+Worth saying, at this point the version of Python we're using. Don't forget there's still a load of stuff out there for v2.7. But we are using v3:
+
+```bash
+coops@raspberrypi:~ $ python --version
+Python 3.9.2
+```
+
