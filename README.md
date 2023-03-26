@@ -14,6 +14,8 @@ Using the RPi Imager advanced options, I set it up with:
 # For best results
 I'm developing using my trusty MacBook pro, on the same network as the Pi.  
 The idea is that I use a combination of Microsoft's Visual Studio Code (VS Code) editor running on the Mac and an SSH connection to directly create and build applications on the RPi.  
+# BEWARE!
+It's great developing on the RPi, headless, because everything is exectly as it would be when deployed. BUT BE CAREFUL. If you switch off the RPi without shutting shown properly first, you will at least corrupt the files managing your source code on the device. If you do, it's no biggy, just delete the folder holding the local repo and reclone. YOU DID PUSH TO GITHUB, THOUGH, DIDN'T YOU? 
 ### SSH 
 I use the command:   
 ```bash
