@@ -20,5 +20,5 @@ If the battery is allowed to fail, then the Raspberry Pi operation is rudely int
 It's really important to get the battery right. Panasonic 18650 3.7V NON-PROTECTED.  
 
 
-![Installed UPS](https://cdn.jsdelivr.net/gh/OperationLollipopResources/ups/photo/IMG_0283.jpeg)
+![Installed UPS](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/ups/photo/IMG_0283.jpeg)
 ![works](https://cdn.jsdelivr.net/gh/HeritageHQ/renovationimages/images/st-maries-week-3-021.jpg)
