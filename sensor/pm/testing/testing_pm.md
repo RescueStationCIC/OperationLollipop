@@ -23,6 +23,33 @@ You can do this, of course; there is a perfectly good 5v output from the RPi.
 
 But, if you're feeling lucky, you can always grab the soldering iron, and make a hopeless mess of a perfectly good component. This is what I am going to do.
 
+To start off, here's the PM sensor, its adapter board, cable and in the foreground, the USB-UART adapter.
+
+![](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/sensor/pm/photo/IMG_0293.jpeg)  
+
+I checked the incoming pins on the USB, for the 5V VCC. I've got a standard debug cable and snipped off one of the ends. I've tinned it with a bit of solder and I've got some Blu-Tack (other sticky things are available) to hold it steady.
+
+I'm going to try and solder it, keeping aware that the inportant chips are really close. I don't want to cook them. I also want to avoid shorting the data lines to the 5V line, with my fat-fingered soldering.
+
+Here's the setup, having miracualously removed the case without cracking it.
+
+![](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/sensor/pm/photo/IMG_0296.jpeg)  
+
+Here's the final thing, with the 5v wire soldered in and ready to go:
+
+![](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/sensor/pm/photo/IMG_0300.jpeg) 
+
+Now I plug it in, and wait for a short to fry the USB controller on my RPi:
+
+![](https://cdn.jsdelivr.net/gh/RescueStationCIC/OperationLollipopResources/sensor/pm/photo/IMG_0301.jpeg) 
+
+Presto! The red-light, and celebratory snack, shows no ill-effects! One point for the idiot in with the iron.
+
+
+
+
+
+
 
 
 
