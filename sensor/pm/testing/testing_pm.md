@@ -62,4 +62,36 @@ Worth saying, at this point the version of Python we're using. Don't forget ther
 coops@raspberrypi:~ $ python --version
 Python 3.9.2
 ```
+Install Python's package manager, pip:
+
+```bash
+sudo apt install python3-pip
+```
+
+Check pip's version:
+```
+coops@raspberrypi:~/projects/OperationLollipop $ pip --version
+pip 20.3.4 from /usr/lib/python3/dist-packages/pip (python 3.9)
+```
+
+
+Install Pyserial
+
+```
+python3 -m pip install pyserial
+```
+
+We can query the RPi for the serial devices we have connected. This is a more comprehensive version of the methods we used in [testing the gas sensors](../../gas/testing/testing_ethanol.md)
+
+```
+coops@raspberrypi:~/projects/OperationLollipop $ python -m serial.tools.miniterm
+
+--- Available ports:
+---  1: /dev/ttyAMA0         'ttyAMA0'
+---  2: /dev/ttyUSB0         'CP2102 USB to UART Bridge Controller - CP2102 USB to UART Bridge Controller'
+---  3: /dev/ttyUSB1         'FT232R USB UART - FT232R USB UART'
+```
+
+
+
 
