@@ -20,4 +20,16 @@ Meanwhile the driver board connects onto the RPi's 40-pin GPIO connector. The UP
 
 
 ### Quick
-The USB Spoofer starts up with the Blue LED flashing. It means it's not set (although the output is 5v). To set it, hold the little button down as you power up the board. It starts multicolour flashing. Make sure you measure the output voltage. As you press the button, you'll cycle through the output voltages. When you get to 5v. Long press the button, until the light goes out. Keep measuring the voltage, and ensure that you have 5v.
+The USB Spoofer starts up with the Blue LED flashing. It means it's not set (although the output is 5v). To set it, hold the little button down as you power up the board. It starts multicolour flashing. 
+Once the button is released, the LED returns red indicating that it is at 5v. 
+Press and hold until the LED goes out, to save the value.
+
+NOTE: in programming mode the output is ALWAYS 5v regardless of what we are going to set. The selected voltage will be output at the next connection.
+
+Briefly pressing the button will cycle the modes; once you arrive at the necessary one hold it until the LED is switched off (then press and hold the button for a couple of seconds approx.) to save the setting.
+
+LED colours are: Red-5V, yellow-9V, green-12V, blue-15V, blue-20V, purple-select the maximum voltage available (the output will therefore depend on the power supply connected to the module), white-cycle continuously all available voltages, useful for example with a multimeter connected to the output for Test different powerbank or USB charger/power supplies and know what their steps are available.
+
+Since the device works as a Pass-Through, it supports up to 100W (which is the maximum supported by the PD standard); in the case of powerbanks instead the maximum power is 18W (PD2) - 20W (PD3), ie 12V to 1.5 UNTO
+
+Disconnect and reeconnect. Ensure the LED lights up to the colour you have chosen. Make sure you measure the output voltage!
