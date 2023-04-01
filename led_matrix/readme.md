@@ -66,13 +66,17 @@ curl https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/m
 
 curl is a utility for sending HTTP requests to web services. It downloads the contents of the file the the address, and stuffs it into a file called rgb-matrix.sh. 
 
-Run the software:
+Run the software, according to instructions, [here](https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices)
 
 ```
 ./rgb-matrix.sh
 ```
 
+Once installed, quick test:
 
+```bash
+sudo ./demo --led-cols=64 --led-rows=64 -D0
+```
 
 
 
