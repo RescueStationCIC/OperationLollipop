@@ -39,13 +39,43 @@ Disconnect and reeconnect. Ensure the LED lights up to the colour you have chose
 Plug the power connector into its connector on the display board
 Plug the other end of the power connector into the spoofer. 
 
-### Data
+#### Data
 Mount the Adafruit matrix driver on the 40 pin connector of the UPS.
 Plug the HUB75 connector into the Adafruit Mmatrix driver
 Plug the other end of the HUB75 connector into the HUB75 connector, marked INPUT, on the display board.
 
-### Power ON
+#### Power ON
 Is there any fizzing?
+
+I can't smell anything.
+
+### Download the software
+
+Go to your home directory. We're going to download some software here, and we dont want it to go into our repo: it may be updated at different points, and we want you to get the latest one.
+
+```
+cd ~
+```
+
+Download the software:
+
+``` bash
+curl https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/main/rgb-matrix.sh >rgb-matrix.sh
+```
+
+
+curl is a utility for sending HTTP requests to web services. It downloads the contents of the file the the address, and stuffs it into a file called rgb-matrix.sh. 
+
+Run the software:
+
+```
+./rgb-matrix.sh
+```
+
+
+
+
+
 
 
 
