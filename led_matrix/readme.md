@@ -19,7 +19,9 @@ The Hat needs a 5v DC Input, which needs to supply it with enough juice to light
 Meanwhile the driver board connects onto the RPi's 40-pin GPIO connector. The UPS also connects via this connector, and is huge, with the giant Li-ion batteries, so we use standoffs to support the board a fair distance above it (they both get very warm), and a 40-way ribbon cable.
 
 
-### Quick
+### Setting up the power supply
+Power off EVERYTHING!
+#### Spoofer
 The USB Spoofer starts up with the Blue LED flashing. It means it's not set (although the output is 5v). To set it, hold the little button down as you power up the board. It starts multicolour flashing. 
 Once the button is released, the LED returns red indicating that it is at 5v. 
 Press and hold until the LED goes out, to save the value.
@@ -33,3 +35,17 @@ LED colours are: Red-5V, yellow-9V, green-12V, blue-15V, blue-20V, purple-select
 Since the device works as a Pass-Through, it supports up to 100W (which is the maximum supported by the PD standard); in the case of powerbanks instead the maximum power is 18W (PD2) - 20W (PD3), ie 12V to 1.5 UNTO
 
 Disconnect and reeconnect. Ensure the LED lights up to the colour you have chosen. Make sure you measure the output voltage!
+
+Plug the power connector into its connector on the display board
+Plug the other end of the power connector into the spoofer. 
+
+### Data
+Mount the Adafruit matrix driver on the 40 pin connector of the UPS.
+Plug the HUB75 connector into the Adafruit Mmatrix driver
+Plug the other end of the HUB75 connector into the HUB75 connector, marked INPUT, on the display board.
+
+### Power ON
+Is there any fizzing?
+
+
+
