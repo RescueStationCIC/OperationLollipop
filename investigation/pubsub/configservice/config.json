@@ -1,0 +1,12 @@
+{
+    "version":"0.0.1",
+    "product":"Operation Lollipop",
+    "thanks_to": [
+        "Julian Tait", 
+        "Yusof Bandar"
+    ], 
+    "config":{
+        "file_name":"config.json",
+        "default_config_path": "/usr/local/operation_lollipop/config"
+    }
+}
