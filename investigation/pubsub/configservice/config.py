@@ -19,7 +19,7 @@ class Config():
             cls.__instance.read()
         else:
             raise Exception("could not find config file at: " + abs_path)
-        return cls.__instance
+        return cls
            
                 
     def __init__(self, create_key, config_path:str): 
@@ -35,13 +35,13 @@ class Config():
         f = open(cls.__instance.config_path)
         cls.__instance.data = json.load(f)
         f.close
-        return cls.__instance
+        return cls
     
     @classmethod  
     def data(cls):
         if (cls.__instance is None):
             raise Exception("use create first.")
-        return cls.__instance.data
+        return json.dumps(cls.__instance.data)
         
     @classmethod  
     def path(cls):

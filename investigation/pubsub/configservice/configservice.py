@@ -1,46 +1,46 @@
 import time
 import daemon
-from .config import Config
-from ..common import Common
-from watchdog.observers import file_observer
+import importlib
+
+from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pynng import Pub0, Timeout
 
-
-
-
+from .config import Config
+from common.definitions import Definitions
 
 class FileCreateHandler(FileSystemEventHandler):
     
     def __init__(self, publisher):
-        FileSystemEventHandler.__init__()
+        FileSystemEventHandler.__init__(self)
         self.publisher = publisher
     
     def on_modified(self, event):
-        self.publisher.send(Config.read().data())
+        self.publisher.send(Config.read().data().encode())
+        
         
         
         
 # uncomment to behave as daemon
 # with daemon.DaemonContext():
 # comment to behave as daemon
-if ( 1==1):
+def start_config():
     
-    # holds immutable variables: access to all
-    Common.create()
+
     
     # holds variable config changes reported over Publish and Subscribe
     Config.create('./config.json')
     
     
     # create config publisher
-    publisher = Pub0(listen=Common.definitions().PUBSUB_ADDRESS)
+
+    publisher = Pub0(listen=Definitions.instance().definition('PUBSUB_ADDRESS'))
     
     
     event_handler = FileCreateHandler(publisher)
 
     # Create an file_observer.
-    file_observer = file_observer()
+    file_observer = Observer()
 
     # Attach the file_observer to the event handler.
     file_observer.schedule(event_handler, Config.path())

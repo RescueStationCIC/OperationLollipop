@@ -2,6 +2,8 @@
 
 https://stackoverflow.com/questions/2349991/how-do-i-import-other-python-files
 
+https://stackoverflow.com/questions/73166298/cant-do-python-imports-from-another-dir
+
 https://stackoverflow.com/questions/8212053/private-constructor-in-python
 
 https://levelup.gitconnected.com/how-to-deserialize-json-to-custom-class-objects-in-python-d8b92949cd3b
