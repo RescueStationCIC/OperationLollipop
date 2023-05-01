@@ -1,11 +1,11 @@
 import time
 import daemon
-import importlib
+
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from trio import run
 from pynng import Pub0, Timeout
-
 from .config import Config
 from common.definitions import Definitions
 
@@ -14,21 +14,17 @@ class FileCreateHandler(FileSystemEventHandler):
     def __init__(self, publisher):
         FileSystemEventHandler.__init__(self)
         self.publisher = publisher
+        self.topic = Definitions.instance().definition('TOPIC_CONFIG')
+        self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
     
     def on_modified(self, event):
-        self.publisher.send(Config.read().data().encode())
+        msg = self.topic + ': ' + Config.read().data()
+        self.publisher.send(msg.encode(self.encoding))
         
-        
-        
-        
-# uncomment to behave as daemon
-# with daemon.DaemonContext():
-# comment to behave as daemon
-def start_config():
-    
 
-    
-    # holds variable config changes reported over Publish and Subscribe
+
+async def begin_config_listeners():
+        # holds variable config changes reported over Publish and Subscribe
     Config.create('./config.json')
     
     
@@ -48,12 +44,25 @@ def start_config():
     # Start the file_observer.
     file_observer.start()
 
-    try:
-        while file_observer.is_alive():
-            file_observer.join(1)
-    finally:
-        file_observer.stop()
-        file_observer.join()
+    # try:
+    #     while file_observer.is_alive():
+    #         file_observer.join(1)
+    # finally:
+    #     file_observer.stop()
+    #     file_observer.join()
+
+
+
+# uncomment to behave as daemon
+# with daemon.DaemonContext():
+# comment to behave as daemon
+def start():
+    run(begin_config_listeners)
+    
+    
+
+    
+
     
     
  

@@ -1,4 +1,6 @@
-from configservice.configservice import start_config
+from configservice.configservice import start as start_configservice
+from deviceservice.deviceservice import start as start_deviceservice
 
 
-start_config()
+start_configservice()
+start_deviceservice()

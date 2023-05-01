@@ -23,7 +23,11 @@ class Definitions():
         assert(create_key == Definitions.__create_key), \
             "Definitions objects must be created using the class method, instance"
         self.definitions = {
-            'PUBSUB_ADDRESS': 'tcp://127.0.0.1:31313'
+            'PUBSUB_ADDRESS': 'tcp://127.0.0.1:31313',
+            'TOPIC_CONFIG' : 'CONFIG',
+            'TRANSFER_ENCODING': 'UTF-8',
+            'RECEIVER_TIMEOUT_MS' : 100000
+            
             }
         
 
