@@ -1,5 +1,9 @@
 # Investigation into PubSub
 
+https://stackoverflow.com/questions/2349991/how-do-i-import-other-python-files
+
+https://stackoverflow.com/questions/8212053/private-constructor-in-python
+
 https://levelup.gitconnected.com/how-to-deserialize-json-to-custom-class-objects-in-python-d8b92949cd3b
 
 https://pypi.org/project/python-daemon/
@@ -23,11 +27,20 @@ Reporting Service will start, and subscribe to the Devices topic. It will use th
 ----
 
 
+daemon service
 ```
 pip install python-daemon
 ```
 
+filesystem events
+```
+pip install watchdog
+```
 
+NNG PubSub
+```
+pip3 install pynng
+```
 
 
 
