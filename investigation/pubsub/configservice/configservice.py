@@ -9,33 +9,40 @@ from pynng import Pub0, Timeout
 from .config import Config
 
 from common.definitions import Definitions
+from common.publisher import Publisher
+from common.messagehandler import RegistrationHandler
 
-class FileCreateHandler(FileSystemEventHandler):
+class ConfigChangeHandler(FileSystemEventHandler):
     
-    def __init__(self, publisher):
+    def __init__(self, on_config_modified):
         FileSystemEventHandler.__init__(self)
-        self.publisher = publisher
-        self.topic = Definitions.instance().definition('TOPIC_CONFIG')
-        self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
+        self.on_config_modified = on_config_modified
+
     
     def on_modified(self, event):
         if (event.key[2] == True):
-            msg = self.topic + ': ' + Config.read().data()
-            self.publisher.send(msg.encode(self.encoding))
+           self.on_config_modified("configuration change")
         
 
+    
 
-async def begin_config_listeners():
+async def setup():
         # holds variable config changes reported over Publish and Subscribe
     Config.create('./config.json')
     
+    def publish_config(reason: str):
+        print (reason)
+        publisher.publish(Config.read().data())
+
+    def on_new_registration(object):
+        publish_config("regsitration: " + object.name)
+        
     
     # create config publisher
-
-    publisher = Pub0(listen=Definitions.instance().definition('PUBSUB_ADDRESS'))
+    publisher = Publisher(Definitions.instance().definition('TOPIC_CONFIG'))
     
-    
-    event_handler = FileCreateHandler(publisher)
+    event_handler = ConfigChangeHandler(publish_config)
+    registration_handler = RegistrationHandler(on_new_registration)
 
     # Create an file_observer.
     file_observer = Observer()
@@ -45,13 +52,10 @@ async def begin_config_listeners():
 
     # Start the file_observer.
     file_observer.start()
-
-    # try:
-    #     while file_observer.is_alive():
-    #         file_observer.join(1)
-    # finally:
-    #     file_observer.stop()
-    #     file_observer.join()
+    
+    # Start the registration handler
+    registration_handler.start()
+    
 
 
 
@@ -59,7 +63,8 @@ async def begin_config_listeners():
 # with daemon.DaemonContext():
 # comment to behave as daemon
 def start():
-    run(begin_config_listeners)
+    run(setup)
+    
 
     
     

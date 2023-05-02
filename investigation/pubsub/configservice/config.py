@@ -41,7 +41,7 @@ class Config():
     def data(cls):
         if (cls.__instance is None):
             raise Exception("use create first.")
-        return json.dumps(cls.__instance.data)
+        return cls.__instance.data
         
     @classmethod  
     def path(cls):

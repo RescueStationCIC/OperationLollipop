@@ -25,8 +25,11 @@ class Definitions():
         self.definitions = {
             'PUBSUB_ADDRESS': 'tcp://127.0.0.1:31313',
             'TOPIC_CONFIG' : 'CONFIG',
+            'TOPIC_REGISTRATION': 'REGISTRATION',
             'TRANSFER_ENCODING': 'UTF-8',
-            'RECEIVER_TIMEOUT_MS' : 100000
+            'RECEIVER_TIMEOUT_MS' : 100000,
+            'SERVICENAME_CONFIG' : 'configurationservice',
+            'SERVICENAME_DEVICE' : 'deviceservice'
             
             }
         

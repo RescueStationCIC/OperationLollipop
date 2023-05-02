@@ -14,6 +14,10 @@ https://pynng.readthedocs.io/_/downloads/en/latest/pdf/
 
 https://stackoverflow.com/questions/8110310/simple-way-to-query-connected-usb-devices-info-in-python
 
+
+
+
+
 Config Service will start, and open the default configuration file. it will send the configuration out onto the Config Topic.
 
 Device Service will start, enumerate all USB devices, and send them out onto a PubSub topic: Devices
@@ -44,6 +48,4 @@ NNG PubSub
 pip3 install pynng
 ```
 
-
-
-
+NNG PubSub was a VERY BAD IDEA. Cannot do multiple Publishers to Multiple subscribers. And If I'd thought about it for any lenth of time, thet would have been obvious.
