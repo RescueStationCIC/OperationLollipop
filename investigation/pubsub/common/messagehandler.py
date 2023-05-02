@@ -1,43 +1,59 @@
 import json
-from trio import run
-from pynng import Sub0, Timeout
+import time
+import uuid
+import trio
+
+import paho.mqtt.client as mqtt
 from common.definitions import Definitions
-                
-
-
-
+          
 class MessageHandler:
 
     def __init__(self,topic_name):
+        print ('SUB: init: ' + topic_name)
         self.topic_name = topic_name 
         self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
         self.address = Definitions.instance().definition('PUBSUB_ADDRESS')
+        self.port = Definitions.instance().definition('PUBSUB_PORT')
+        self.keepalive = Definitions.instance().definition('PUBSUB_KEEPALIVE')
         self.timeout = Definitions.instance().definition('RECEIVER_TIMEOUT_MS')
-        self.topic_tag = self.topic_name + ': '
-        self.topic_tag_bytes:bytes = topic_name.encode(self.encoding)
-        self.stopped=False
-        self.subscriber = Sub0(
-            dial = self.address,
-            recv_timeout=self.timeout)
-        self.subscriber.subscribe(self.topic_tag_bytes)
+        self.subscriber = mqtt.Client(str(uuid.uuid4()))
+        self.subscriber_id = None
+        self.subscribed = None
+        self.connected = False
     
+    async def start(self):
+        print ('SUB: prepare')
+        self.subscriber.on_subscribe = self.on_subscribe        
+        self.subscriber.on_message =  self.on_message
+        self.subscriber.on_connect = self.on_connect 
+        self.subscriber.on_disconnect = self.on_disconnect  
+        self.subscriber.connect(self.address, self.port, self.keepalive)#, on_connect)
+        self.subscriber.loop_start()
+        print('SUB: start')
+
+    
+    def on_connect(self, client, userdata, flags, rc):
+        self.connected = True
+        self.subscriber_id = client
+        self.subscriber.subscribe(self.topic_name,2)   
+ 
+    def on_disconnect(self,client, userdata,  rc):
+        self.connected = False
+        print('WARNING: Disconnected.')
+        
+    def on_subscribe (self,client, userdata, mid, granted_qos):
+        print('subscribed')
+        self.subscribed = True
+        self.subscriber.loop_stop()  
+        
+    def on_message(self, client, userdata, message,tmp=None):
+        object = json.loads(message)
+        self.on_new_data(object)
+        
     def on_new_data(self, object):
         print (object)  
     
-    def stop (self):
-        self.stopped = True 
-        
-    async def start(self):
-        while (self.stopped == False):
-            try:
-                msg = await self.subscriber.arecv_msg()
-                raw = msg.bytes
-                data = raw.decode(self.encoding).partition(self.topic_tag)[2]
-                object = json.loads(data)
-                self.on_new_data(object)
-            except:
-                pass # todo: log this eventually
-            
+    
             
             
 class ConfigurationHandler(MessageHandler):

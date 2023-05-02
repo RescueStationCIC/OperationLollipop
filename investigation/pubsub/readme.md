@@ -14,7 +14,7 @@ https://pynng.readthedocs.io/_/downloads/en/latest/pdf/
 
 https://stackoverflow.com/questions/8110310/simple-way-to-query-connected-usb-devices-info-in-python
 
-
+https://www.engineersgarage.com/mqtt-broker-mosquitto-raspberry-pi/
 
 
 
@@ -49,3 +49,31 @@ pip3 install pynng
 ```
 
 NNG PubSub was a VERY BAD IDEA. Cannot do multiple Publishers to Multiple subscribers. And If I'd thought about it for any lenth of time, thet would have been obvious.
+
+
+Going to put mosquito MQTT onto RPi. This supports retention, too:
+```
+sudo apt install -y mosquitto mosquitto-clients
+```
+
+Then install pahoe-mqtt:
+```
+pip install paho-mqtt
+```
+
+
+check MQTT configuration
+```
+sudo nano etc/mosquitto/mosquitto.conf
+```
+
+add the following:
+```
+allow_anonymous true
+```
+
+startup mosquitto:
+
+```
+sudo systemctl start mosquitto
+```

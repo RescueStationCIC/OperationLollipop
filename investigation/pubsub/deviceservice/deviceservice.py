@@ -3,7 +3,6 @@ import daemon
 import json
 
 from trio import run
-from pynng import Sub0, Timeout
 from common.definitions import Definitions
 from common.messagehandler import ConfigurationHandler
 from common.publisher import RegistrationPublisher
@@ -19,16 +18,17 @@ def on_new_config(config):
     
     
     
-async def setup():
+def setup():
     # listener for configuration updates
     config_handler = ConfigurationHandler(Definitions.instance().definition('TOPIC_CONFIG'), on_new_config)
-    config_handler.start
+    run(config_handler.start)
+    
     # tell everyone (but mostly the configuration service) we're alive
-    RegistrationPublisher(Definitions.instance().definition('SERVICENAME_DEVICE')).publish()
+    RegistrationPublisher(Definitions.instance().definition('SERVICENAME_DEVICE')).prepare().publish()
         
 
 def start():
-    run (setup)
+    setup()
    
     
     

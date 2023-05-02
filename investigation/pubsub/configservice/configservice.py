@@ -5,7 +5,6 @@ import daemon
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from trio import run
-from pynng import Pub0, Timeout
 from .config import Config
 
 from common.definitions import Definitions
@@ -22,11 +21,9 @@ class ConfigChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if (event.key[2] == True):
            self.on_config_modified("configuration change")
-        
+            
 
-    
-
-async def setup():
+def setup():
         # holds variable config changes reported over Publish and Subscribe
     Config.create('./config.json')
     
@@ -41,6 +38,8 @@ async def setup():
     # create config publisher
     publisher = Publisher(Definitions.instance().definition('TOPIC_CONFIG'))
     
+    publisher.prepare()
+    
     event_handler = ConfigChangeHandler(publish_config)
     registration_handler = RegistrationHandler(on_new_registration)
 
@@ -54,7 +53,9 @@ async def setup():
     file_observer.start()
     
     # Start the registration handler
-    registration_handler.start()
+    run(registration_handler.start)
+    
+    print ('config service setup complete')
     
 
 
@@ -63,7 +64,7 @@ async def setup():
 # with daemon.DaemonContext():
 # comment to behave as daemon
 def start():
-    run(setup)
+    setup()
     
 
     
