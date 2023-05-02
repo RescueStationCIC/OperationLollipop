@@ -19,8 +19,9 @@ class FileCreateHandler(FileSystemEventHandler):
         self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
     
     def on_modified(self, event):
-        msg = self.topic + ': ' + Config.read().data()
-        self.publisher.send(msg.encode(self.encoding))
+        if (event.key[2] == True):
+            msg = self.topic + ': ' + Config.read().data()
+            self.publisher.send(msg.encode(self.encoding))
         
 
 
