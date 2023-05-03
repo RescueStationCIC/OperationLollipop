@@ -33,7 +33,7 @@ class Definitions():
             'RECEIVER_TIMEOUT_MS' : 100000,
             'SERVICENAME_CONFIG' : 'configurationservice',
             'SERVICENAME_DEVICE' : 'deviceservice',
-            'SERVICENAME_MESSAGEPANEL' : 'messagepanel',
+            'SERVICENAME_MESSAGEPANEL': 'messagepanelservice',
             'PATH_DEVICES':'/dev/bus/usb',
             'PATH_CONFIG':'./config.json'
             }

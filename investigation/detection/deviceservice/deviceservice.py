@@ -77,13 +77,13 @@ def setup():
     
     
     # listener for configuration updates
-    config_handler = ConfigurationHandler( on_new_config)
+    config_handler = ConfigurationHandler(on_new_config)
     run(config_handler.start)
     
     # tell everyone (but mostly the configuration service) we're alive
     RegistrationPublisher(Definitions.instance().definition('SERVICENAME_DEVICE')).prepare().publish()
     
-    print('deviceservice setup')
+    print('deviceservice setup complete')
         
 
 def start():

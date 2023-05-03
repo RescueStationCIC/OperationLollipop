@@ -70,3 +70,13 @@ class RegistrationHandler(MessageHandler):
     def __init__(self, on_new_registration):
         MessageHandler.__init__(self, Definitions.instance().definition('TOPIC_REGISTRATION'))
         self.on_new_registration = on_new_registration
+        
+        
+class DeviceListHandler(MessageHandler):
+    
+    def on_new_data(self,object):
+        self.on_devicelist_update(object)
+     
+    def __init__(self, on_devicelist_update):
+        MessageHandler.__init__(self, Definitions.instance().definition('TOPIC_DEVICELIST'))
+        self.on_devicelist_update = on_devicelist_update
