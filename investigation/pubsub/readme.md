@@ -17,18 +17,13 @@ https://stackoverflow.com/questions/8110310/simple-way-to-query-connected-usb-de
 https://www.engineersgarage.com/mqtt-broker-mosquitto-raspberry-pi/
 
 
+configurationservice will start, and open the default configuration file. it will send the configuration out onto the CONFIG Topic. It will listen for publishes to the REGISTRATION topic.
 
-Config Service will start, and open the default configuration file. it will send the configuration out onto the Config Topic.
+Device Service will start, and listen to the CONFIG Topic. When ready, it will publish to the REGISTRATION Topic. This will cause the configurationservice to publish to CONFIG.
 
-Device Service will start, enumerate all USB devices, and send them out onto a PubSub topic: Devices
-Device Service will listen to Config topic for any changes.
+Originally, I was working with an ultra-lite PUBSUB implementation, which had no data retention. This meant that subscribing to a particular topic would not cause a message to be sent witht he current state. The alternative is to you registration to trigger an update of the latest information.
 
-Data Service will start and subscribe to the Devices topic. It will use this to find all USB devices and all internally mounted drives. It will search for all devices which look like a removable drive. 
-It will record the ids of all items. 
-Data Service will listent to the Config Service
-Data service will listen to the Log topic for any updates, and write the items to the file path specified by the Config service.
-
-Reporting Service will start, and subscribe to the Devices topic. It will use this to find all USB devices currently connected. It will test each in turn to find one which is a Display Panel. Once tested successfully, the USB device ID is recorded. The Service will push a success message to the new panel display.
+As it was the implementation didn't support multiple publishers to a topic, so I ended up having to port to the slightly more heavyweight Mosquitto MQTT broker. I'm happy with that :-)
 
 ----
 
@@ -48,8 +43,7 @@ NNG PubSub
 pip3 install pynng
 ```
 
-NNG PubSub was a VERY BAD IDEA. Cannot do multiple Publishers to Multiple subscribers. And If I'd thought about it for any lenth of time, thet would have been obvious.
-
+NNG PubSub was a VERY BAD IDEA. Cannot do multiple Publishers to Multiple subscribers. And If I'd thought about it for any length of time, that would have been obvious.
 
 Going to put mosquito MQTT onto RPi. This supports retention, too:
 ```
@@ -77,3 +71,12 @@ startup mosquitto:
 ```
 sudo systemctl start mosquitto
 ```
+
+but debugging, it's more useful to create a new terminal login, and startup mosquitto from the commandline, as it outputs all logging of connections and data transfers:
+
+```
+sudo systemctl stop mosquitto
+mosquitto -v
+```
+
+
