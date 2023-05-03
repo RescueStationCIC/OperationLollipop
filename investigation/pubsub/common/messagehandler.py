@@ -44,17 +44,15 @@ class MessageHandler:
     def on_subscribe (self,client, userdata, mid, granted_qos):
         print('subscribed')
         self.subscribed = True
-        self.subscriber.loop_stop()  
+
         
     def on_message(self, client, userdata, message,tmp=None):
-        object = json.loads(message)
+    
+        object = json.loads(message.payload.decode(self.encoding))
         self.on_new_data(object)
         
     def on_new_data(self, object):
         print (object)  
-    
-    
-            
             
 class ConfigurationHandler(MessageHandler):
     

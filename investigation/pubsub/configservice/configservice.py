@@ -31,8 +31,8 @@ def setup():
         print (reason)
         publisher.publish(Config.read().data())
 
-    def on_new_registration(object):
-        publish_config("regsitration: " + object.name)
+    def on_new_registration(object:dict):
+        publish_config("regsitration: " + object['name'])
         
     
     # create config publisher
