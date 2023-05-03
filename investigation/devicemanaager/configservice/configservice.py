@@ -24,8 +24,8 @@ class ConfigChangeHandler(FileSystemEventHandler):
             
 
 def setup():
-        # holds variable config changes reported over Publish and Subscribe
-    Config.create('./config.json')
+    # holds variable config changes reported over Publish and Subscribe
+    Config.create(Definitions.instance().definition('PATH_CONFIG'))
     
     def publish_config(reason: str):
         print (reason)
@@ -43,7 +43,7 @@ def setup():
     event_handler = ConfigChangeHandler(publish_config)
     registration_handler = RegistrationHandler(on_new_registration)
 
-    # Create an file_observer.
+    # Create the file_observer.
     file_observer = Observer()
 
     # Attach the file_observer to the event handler.

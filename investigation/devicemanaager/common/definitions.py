@@ -28,11 +28,13 @@ class Definitions():
             'PUBSUB_KEEPALIVE': 60,
             'TOPIC_CONFIG' : 'CONFIG',
             'TOPIC_REGISTRATION': 'REGISTRATION',
+            'TOPIC_DEVICELIST': 'DEVICELIST',
             'TRANSFER_ENCODING': 'UTF-8',
             'RECEIVER_TIMEOUT_MS' : 100000,
             'SERVICENAME_CONFIG' : 'configurationservice',
-            'SERVICENAME_DEVICE' : 'deviceservice'
-            
+            'SERVICENAME_DEVICE' : 'deviceservice',
+            'PATH_DEVICES':'/dev/bus/usb',
+            'PATH_CONFIG':'./config.json'
             }
         
 
