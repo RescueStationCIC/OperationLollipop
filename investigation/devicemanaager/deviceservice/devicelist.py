@@ -29,6 +29,8 @@ class DeviceList():
             "DeviceList objects must be created using the class method, create"
         self.devices_path = devices_path
         self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
+        self.data={'list':[], 'additions':[], 'removals':[]}
+        
     
     @classmethod  
     def read(cls):
@@ -46,7 +48,35 @@ class DeviceList():
                     dinfo = info.groupdict()
                     dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
                     devices.append(dinfo)
-        cls.__instance.data = devices
+                    
+        incumbents = cls.__instance.data['list']
+        additions=[]
+        removals=[]
+            
+        for incoming in devices:
+            found = False
+            for incumbent in incumbents:
+                if incoming['id'] ==  incumbent['id']: # reconnected USB devices get same id 
+                    found = True
+                    break  
+            if (found == False):
+                additions.append(incoming)
+                
+        for incumbent in incumbents:
+            found = False
+            for incoming in devices:
+                if incoming['id'] ==  incumbent['id']: # reconnected USB devices get same id 
+                    found = True
+                    break  
+            if (found == False):
+                removals.append(incoming)
+                         
+        cls.__instance.data['list'] = devices
+        cls.__instance.data['additions'] = additions
+        cls.__instance.data['removals'] = removals
+        
+        print(cls.__instance.data)
+        
         return cls
     
     @classmethod  

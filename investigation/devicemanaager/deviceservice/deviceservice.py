@@ -30,8 +30,6 @@ class DeviceListChangeHandler(FileSystemEventHandler):
         if (event.key[2] == True):
            self.on_device_list_modified("device list modified")
 
-
-
     
 def setup():
     
@@ -85,6 +83,7 @@ def setup():
     # tell everyone (but mostly the configuration service) we're alive
     RegistrationPublisher(Definitions.instance().definition('SERVICENAME_DEVICE')).prepare().publish()
     
+    print('deviceservice setup')
         
 
 def start():

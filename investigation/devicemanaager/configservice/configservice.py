@@ -55,7 +55,7 @@ def setup():
     # Start the registration handler
     run(registration_handler.start)
     
-    print ('config service setup complete')
+    print ('configservice setup complete')
     
 
 

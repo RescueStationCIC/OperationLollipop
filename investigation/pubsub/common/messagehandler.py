@@ -22,14 +22,13 @@ class MessageHandler:
         self.connected = False
     
     async def start(self):
-        print ('SUB: prepare')
+
         self.subscriber.on_subscribe = self.on_subscribe        
         self.subscriber.on_message =  self.on_message
         self.subscriber.on_connect = self.on_connect 
         self.subscriber.on_disconnect = self.on_disconnect  
         self.subscriber.connect(self.address, self.port, self.keepalive)#, on_connect)
         self.subscriber.loop_start()
-        print('SUB: start')
 
     
     def on_connect(self, client, userdata, flags, rc):

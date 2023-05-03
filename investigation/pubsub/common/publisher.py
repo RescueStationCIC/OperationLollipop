@@ -21,10 +21,10 @@ class Publisher:
         self.publisher_id = client    
     
     def on_publish(self, client, userdata, result):
-        print ('published ACK')
+        pass
         
     def prepare(self):  
-        print('PUB: prepare')      
+   
         self.publisher.on_connect = self.on_connect  
         self.publisher.on_publish = self.on_publish 
         self.publisher.connect(self.address, self.port, self.keepalive)
@@ -35,7 +35,7 @@ class Publisher:
         return self
         
     def publish(self,object):
-        msg = json.dumps(object) #.encode(self.encoding)
+        msg = json.dumps(object) 
         self.publisher.publish(self.topic, payload=msg, qos=0, retain=False)
     
         
