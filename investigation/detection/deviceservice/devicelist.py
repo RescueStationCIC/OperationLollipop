@@ -2,6 +2,7 @@ import re
 import subprocess
 import os.path
 import json
+import jc
 from common.definitions import Definitions
 
 class DeviceList():
@@ -28,7 +29,8 @@ class DeviceList():
         assert(create_key == DeviceList.__create_key), \
             "DeviceList objects must be created using the class method, create"
         self.devices_path = devices_path
-        self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
+        self.default_langid = Definitions.USB_LANGID
+        self.encoding = Definitions.TRANSFER_ENCODING
         self.data={'list':[], 'additions':[], 'removals':[]}
         
     
@@ -36,19 +38,13 @@ class DeviceList():
     def read(cls):
         if (cls.__instance is None):
             raise Exception("use create first.")
-
-        device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
-        df = subprocess.check_output("lsusb")
-        df_str = df.decode(cls.__instance.encoding)
-        devices = []
-        for i in df_str.split('\n'):
-            if i:
-                info = device_re.match(i)
-                if info:
-                    dinfo = info.groupdict()
-                    dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
-                    devices.append(dinfo)
-                    
+        encoding = cls.__instance.encoding
+        output = subprocess.check_output(
+            ["lsusb"]
+#            ,"-v"
+            ).decode(encoding)
+        devices = jc.parse('lsusb', output )
+        
         incumbents = cls.__instance.data['list']
         additions=[]
         removals=[]
@@ -75,8 +71,9 @@ class DeviceList():
         cls.__instance.data['additions'] = additions
         cls.__instance.data['removals'] = removals
         
-        print(cls.__instance.data)
-        
+        str_debug = json.dumps(cls.__instance.data, indent=2)
+        print (str_debug)
+                
         return cls
     
     @classmethod  

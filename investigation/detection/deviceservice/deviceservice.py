@@ -40,7 +40,7 @@ def setup():
     
 
     # reads and holds the current device list
-    DeviceList.create(Definitions.instance().definition('PATH_DEVICES'))
+    DeviceList.create(Definitions.PATH_DEVICES)
     
     
     # reads and publishes the current device list
@@ -49,7 +49,7 @@ def setup():
         devicelist_publisher.publish(DeviceList.read().data())
     
     # the PUB SUB publisher of the device list
-    devicelist_publisher = Publisher(Definitions.instance().definition('TOPIC_DEVICELIST'))
+    devicelist_publisher = Publisher(Definitions.TOPIC_DEVICELIST)
     devicelist_publisher.prepare()
     
     
@@ -81,7 +81,7 @@ def setup():
     run(config_handler.start)
     
     # tell everyone (but mostly the configuration service) we're alive
-    RegistrationPublisher(Definitions.instance().definition('SERVICENAME_DEVICE')).prepare().publish()
+    RegistrationPublisher(Definitions.SERVICENAME_DEVICE).prepare().publish()
     
     print('deviceservice setup complete')
         

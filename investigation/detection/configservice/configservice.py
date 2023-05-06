@@ -25,7 +25,7 @@ class ConfigChangeHandler(FileSystemEventHandler):
 
 def setup():
     # holds variable config changes reported over Publish and Subscribe
-    Config.create(Definitions.instance().definition('PATH_CONFIG'))
+    Config.create(Definitions.PATH_CONFIG)
     
     def publish_config(reason: str):
         print (reason)
@@ -36,7 +36,7 @@ def setup():
         
     
     # create config publisher
-    publisher = Publisher(Definitions.instance().definition('TOPIC_CONFIG'))
+    publisher = Publisher(Definitions.TOPIC_CONFIG)
     
     publisher.prepare()
     

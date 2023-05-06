@@ -10,10 +10,10 @@ class Publisher:
         print ('PUB: init: ' + topic)
         self.topic = topic        
         self.publisher = mqtt.Client(client_id=str(uuid.uuid4()))
-        self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
-        self.address = Definitions.instance().definition('PUBSUB_ADDRESS')
-        self.port = Definitions.instance().definition('PUBSUB_PORT')
-        self.keepalive = Definitions.instance().definition('PUBSUB_KEEPALIVE')
+        self.encoding = Definitions.TRANSFER_ENCODING
+        self.address = Definitions.PUBSUB_ADDRESS
+        self.port = Definitions.PUBSUB_PORT
+        self.keepalive = Definitions.PUBSUB_KEEPALIVE
         self.publisher_id = None
     
     
@@ -42,7 +42,7 @@ class Publisher:
     
 class RegistrationPublisher(Publisher):
     def __init__(self, name:str):
-        Publisher.__init__(self, Definitions.instance().definition('TOPIC_REGISTRATION'))
+        Publisher.__init__(self, Definitions.TOPIC_REGISTRATION)
         self.name = name
         
     def publish(self):

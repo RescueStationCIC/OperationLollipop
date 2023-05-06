@@ -2,7 +2,17 @@
 
 
 https://python.hotexamples.com/examples/libusb/-/usb_get_string_simple/python-usb_get_string_simple-function-examples.html
+Access to USB gives permissions errors. Have to add user to rules:
+https://raspberrypi.stackexchange.com/questions/125091/how-to-create-a-linux-user-group-that-grants-access-to-usb-devices
+https://forums.raspberrypi.com/viewtopic.php?t=186839
 
+coops@raspberrypi:~/projects/OperationLollipop $ groups
+coops adm dialout cdrom sudo audio video plugdev games users input render netdev gpio i2c spi 
+
+
+VERY VERY NAUGHTY:
+sudo adduser coops root
+But works to stop permissions errors. VS Code currently not playing nicely with applying sudo to python as externalTerminal setting does not appear to behave itsself.
 
 messagepanel's job is to listen for MESSAGE events, and queue them up to be displayed in order of receipt.
 

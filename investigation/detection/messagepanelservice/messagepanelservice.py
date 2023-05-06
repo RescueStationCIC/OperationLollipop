@@ -24,7 +24,8 @@ def setup():
         print('messagepanelservice sees new config')
         
     def on_devicelist_update(devicelist):
-        print('messagepanelservice sees new devicelist: ')
+        
+        print('messagepanelservice sees new devicelist')
     
     # listener for configuration updates
     config_handler = ConfigurationHandler( on_new_config)
@@ -35,7 +36,7 @@ def setup():
     run(devicelist_handler.start)    
     
     # tell everyone (but mostly the configuration service) we're alive
-    RegistrationPublisher(Definitions.instance().definition('SERVICENAME_MESSAGEPANEL')).prepare().publish()
+    RegistrationPublisher(Definitions.SERVICENAME_MESSAGEPANEL).prepare().publish()
     
     print('messagepanelservice setup complete')
         

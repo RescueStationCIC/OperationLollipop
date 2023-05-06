@@ -11,11 +11,11 @@ class MessageHandler:
     def __init__(self,topic_name):
         print ('SUB: init: ' + topic_name)
         self.topic_name = topic_name 
-        self.encoding = Definitions.instance().definition('TRANSFER_ENCODING')
-        self.address = Definitions.instance().definition('PUBSUB_ADDRESS')
-        self.port = Definitions.instance().definition('PUBSUB_PORT')
-        self.keepalive = Definitions.instance().definition('PUBSUB_KEEPALIVE')
-        self.timeout = Definitions.instance().definition('RECEIVER_TIMEOUT_MS')
+        self.encoding = Definitions.TRANSFER_ENCODING
+        self.address = Definitions.PUBSUB_ADDRESS
+        self.port = Definitions.PUBSUB_PORT
+        self.keepalive = Definitions.PUBSUB_KEEPALIVE
+        self.timeout = Definitions.RECEIVER_TIMEOUT_MS
         self.subscriber = mqtt.Client(str(uuid.uuid4()))
         self.subscriber_id = None
         self.subscribed = None
@@ -59,7 +59,7 @@ class ConfigurationHandler(MessageHandler):
         self.on_new_config(object)
     
     def __init__(self, on_new_config):
-        MessageHandler.__init__(self, Definitions.instance().definition('TOPIC_CONFIG'))
+        MessageHandler.__init__(self, Definitions.TOPIC_CONFIG)
         self.on_new_config = on_new_config
 
 class RegistrationHandler(MessageHandler):
@@ -68,7 +68,7 @@ class RegistrationHandler(MessageHandler):
         self.on_new_registration(object)
      
     def __init__(self, on_new_registration):
-        MessageHandler.__init__(self, Definitions.instance().definition('TOPIC_REGISTRATION'))
+        MessageHandler.__init__(self, Definitions.TOPIC_REGISTRATION)
         self.on_new_registration = on_new_registration
         
         
@@ -78,5 +78,5 @@ class DeviceListHandler(MessageHandler):
         self.on_devicelist_update(object)
      
     def __init__(self, on_devicelist_update):
-        MessageHandler.__init__(self, Definitions.instance().definition('TOPIC_DEVICELIST'))
+        MessageHandler.__init__(self, Definitions.TOPIC_DEVICELIST)
         self.on_devicelist_update = on_devicelist_update
