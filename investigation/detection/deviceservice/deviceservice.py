@@ -45,7 +45,7 @@ def setup():
         devicelist_publisher.publish(DeviceList.read().data())
     
     # the PUB SUB publisher of the device list
-    devicelist_publisher = Publisher(Definitions.TOPIC_DEVICELIST)
+    devicelist_publisher = Publisher(Definitions.TOPIC_DEVICESCAN)
     devicelist_publisher.prepare()
     
     
