@@ -1,17 +1,14 @@
-import re
-import subprocess
-import os.path
-import json
 import usb
 import time
-import random
 import logging
-from common.device import DeviceDefinition
-from common.deviceprobe import DeviceProbe
-from common.deviceprobe import ProbeError
-from common.connector import Connector
-
 from common.definitions import Definitions
+from common.device import DeviceDefinition
+from common.device import DeviceScan
+from common.deviceprobe import DeviceProbe
+from common.deviceprobe import ConnectorError
+from common.connector import Connector
+from common.connector import ConnectorManager
+
 from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEndpoints, DeviceProbe
 
 
@@ -157,12 +154,20 @@ class MessagePanelDeviceProbe(DeviceProbe):
         
             
 
-class MessagePanel(Connector):
+class MessagePanelConnector(Connector):
     def __init__(self, device_definition:DeviceDefinition):
         super().__init__(self, device_definition)
         
     def getProbe(self, device_definition: DeviceDefinition) -> DeviceProbe:
         return MessagePanelDeviceProbe(self.device_definition)
+
+
+class MessagePanelManager (ConnectorManager): 
+    def __init__(self, device_definition:DeviceDefinition):
+        super().__init__(self, device_definition)
+        
+    def createConnector(self, device_definition:DeviceDefinition) -> Connector:
+        return MessagePanelConnector(device_definition)
 
             
     

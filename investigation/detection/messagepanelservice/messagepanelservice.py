@@ -1,10 +1,16 @@
 import time
+import logging
 from trio import run
 from common.definitions import Definitions
+from common.error import ConnectorError
 from common.configurationhandler import ConfigurationHandler
-from common.devicelisthandler import DeviceListHandler
+from investigation.detection.common.devicescanhandler import DeviceScanHandler
 from common.publisher import RegistrationPublisher
+from common.device import DeviceScan
+from common.device import DeviceDefinition
 from common.connector import Connector
+from common.connector import ConnectorManager
+from messagepanel import MessagePanelManager
                 
 # uncomment to behave as daemon
 # with daemon.DaemonContext():
@@ -25,20 +31,15 @@ def setup():
     def on_new_config(config):
         print('messagepanelservice sees new config')
         
-    async def some_async_func():
-        time.sleep(10)
-            
-        
-    def on_devicelist_update(devicelist):
-        print('messagepanelservice sees new devices')
+    manager = MessagePanelManager();     
         
     # listener for configuration updates
     config_handler = ConfigurationHandler( on_new_config)
     run(config_handler.start)
     
     # listener for device list updates
-    devicelist_handler = DeviceListHandler( on_devicelist_update)
-    run(devicelist_handler.start)    
+    devicescan_handler = DeviceScanHandler( manager.receive_device_scan )
+    run(devicescan_handler.start)    
     
     # tell everyone (but mostly the configuration service) we're alive
     RegistrationPublisher(Definitions.SERVICENAME_MESSAGEPANEL).prepare().publish()
