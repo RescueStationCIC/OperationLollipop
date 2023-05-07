@@ -9,7 +9,7 @@ from .config import Config
 
 from common.definitions import Definitions
 from common.publisher import Publisher
-from common.messagehandler import RegistrationHandler
+from common.registrationhandler import RegistrationHandler
 
 class ConfigChangeHandler(FileSystemEventHandler):
     

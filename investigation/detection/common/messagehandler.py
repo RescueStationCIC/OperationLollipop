@@ -1,7 +1,5 @@
-import json
-import time
 import uuid
-import trio
+import json
 
 import paho.mqtt.client as mqtt
 from common.definitions import Definitions
@@ -53,30 +51,7 @@ class MessageHandler:
     def on_new_data(self, object):
         print (object)  
             
-class ConfigurationHandler(MessageHandler):
-    
-    def on_new_data(self, object):
-        self.on_new_config(object)
-    
-    def __init__(self, on_new_config):
-        MessageHandler.__init__(self, Definitions.TOPIC_CONFIG)
-        self.on_new_config = on_new_config
 
-class RegistrationHandler(MessageHandler):
-    
-    def on_new_data(self,object):
-        self.on_new_registration(object)
-     
-    def __init__(self, on_new_registration):
-        MessageHandler.__init__(self, Definitions.TOPIC_REGISTRATION)
-        self.on_new_registration = on_new_registration
+
+
         
-        
-class DeviceListHandler(MessageHandler):
-    
-    def on_new_data(self,object):
-        self.on_devicelist_update(object)
-     
-    def __init__(self, on_devicelist_update):
-        MessageHandler.__init__(self, Definitions.TOPIC_DEVICELIST)
-        self.on_devicelist_update = on_devicelist_update

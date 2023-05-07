@@ -5,6 +5,7 @@ https://python.hotexamples.com/examples/libusb/-/usb_get_string_simple/python-us
 Access to USB gives permissions errors. Have to add user to rules:
 https://raspberrypi.stackexchange.com/questions/125091/how-to-create-a-linux-user-group-that-grants-access-to-usb-devices
 https://forums.raspberrypi.com/viewtopic.php?t=186839
+https://github.com/pyusb/pyusb/discussions/432
 
 coops@raspberrypi:~/projects/OperationLollipop $ groups
 coops adm dialout cdrom sudo audio video plugdev games users input render netdev gpio i2c spi 

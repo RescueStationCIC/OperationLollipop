@@ -1,17 +1,13 @@
-import time
-import daemon
-import json
-
 from trio import run
 from common.definitions import Definitions
-from common.messagehandler import ConfigurationHandler
+from common.configurationhandler import ConfigurationHandler
 from common.publisher import Publisher
 from common.publisher import RegistrationPublisher
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from .devicelist import DeviceList
+from deviceservice.devicelist import DeviceList
                 
 # uncomment to behave as daemon
 # with daemon.DaemonContext():

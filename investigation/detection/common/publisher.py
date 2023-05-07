@@ -1,4 +1,4 @@
-import json
+import jsonpickle
 import time
 import uuid
 import paho.mqtt.client as mqtt
@@ -35,7 +35,7 @@ class Publisher:
         return self
         
     def publish(self,object):
-        msg = json.dumps(object) #.encode(self.encoding)
+        msg = jsonpickle.encode(object) #.encode(self.encoding)
         self.publisher.publish(self.topic, payload=msg, qos=0, retain=False)
     
         

@@ -1,10 +1,11 @@
 import re
 import subprocess
 import os.path
-import json
 import jc
+import jsonpickle
 from common.definitions import Definitions
-
+from common.device import DeviceDefinition
+from common.device import DeviceScan
 class DeviceList():
     
     __create_key = object()
@@ -31,7 +32,7 @@ class DeviceList():
         self.devices_path = devices_path
         self.default_langid = Definitions.USB_LANGID
         self.encoding = Definitions.TRANSFER_ENCODING
-        self.data={'list':[], 'additions':[], 'removals':[]}
+        self.data= DeviceScan()
         
     
     @classmethod  
@@ -43,16 +44,21 @@ class DeviceList():
             ["lsusb"]
 #            ,"-v"
             ).decode(encoding)
-        devices = jc.parse('lsusb', output )
+        objects = jc.parse('lsusb', output )
         
-        incumbents = cls.__instance.data['list']
-        additions=[]
-        removals=[]
+        devices = [DeviceDefinition]
+        
+        for object in objects:
+            devices.append(DeviceDefinition(object))
+        
+        incumbents = cls.__instance.data.list
+        additions=[DeviceDefinition]
+        removals=[DeviceDefinition]
             
         for incoming in devices:
             found = False
             for incumbent in incumbents:
-                if incoming['id'] ==  incumbent['id']: # reconnected USB devices get same id 
+                if incoming.system_id ==  incumbent.system_id: 
                     found = True
                     break  
             if (found == False):
@@ -67,11 +73,11 @@ class DeviceList():
             if (found == False):
                 removals.append(incoming)
                          
-        cls.__instance.data['list'] = devices
-        cls.__instance.data['additions'] = additions
-        cls.__instance.data['removals'] = removals
+        cls.__instance.data.list = devices
+        cls.__instance.data.additions = additions
+        cls.__instance.data.removals = removals
         
-        str_debug = json.dumps(cls.__instance.data, indent=2)
+        str_debug = jsonpickle.encode(cls.__instance.data, indent=2)
         print (str_debug)
                 
         return cls

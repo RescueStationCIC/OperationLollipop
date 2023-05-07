@@ -3,13 +3,16 @@ import subprocess
 import os.path
 import json
 import usb
-
+import time
+import random
+import logging
+from common.device import DeviceDefinition
 from common.deviceprobe import DeviceProbe
-from common.deviceprobe import ErrorDefinition
 from common.deviceprobe import ProbeError
+from common.connector import Connector
 
 from common.definitions import Definitions
-from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEndpoints
+from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEndpoints, DeviceProbe
 
 
 # Example output from lsusb -v:
@@ -108,7 +111,7 @@ from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEn
 
 
 class MessagePanelDeviceProbe(DeviceProbe):
-    def __init__(self,device_definition:dict): 
+    def __init__(self,device_definition:DeviceDefinition): 
         super().__init__(self)
         
     def isDeviceTypeRecognised(full_device):
@@ -137,12 +140,33 @@ class MessagePanelDeviceProbe(DeviceProbe):
     def getEndpoints(self, device: usb.Device, interface: usb.Interface) -> DeviceEndpoints:
         result:DeviceEndpoints = DeviceEndpoints()
         
+        result.e_in = usb.util.find_descriptor(
+                    interface,
+                    custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN)
+        result.e_out = usb.util.find_descriptor(
+                    interface,
+                    custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_OUT)
+        
+        return result    
+        
     
     async def probeInterface(self, device: ConnectedDevice) -> ConnectedDevice:
+        device.endpoints.e_out.write('test')
+        time.sleep(1)
+        return device
+        
             
 
-class MessagePanel():
-    def __init__(self, device):
+class MessagePanel(Connector):
+    def __init__(self, device_definition:DeviceDefinition):
+        super().__init__(self, device_definition)
+        
+    def getProbe(self, device_definition: DeviceDefinition) -> DeviceProbe:
+        return MessagePanelDeviceProbe(self.device_definition)
+
+            
+    
+        
         
         
                        

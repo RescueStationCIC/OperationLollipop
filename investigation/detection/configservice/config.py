@@ -1,5 +1,6 @@
 
 import os.path
+import jsonpickle
 import json
 
 class Config():

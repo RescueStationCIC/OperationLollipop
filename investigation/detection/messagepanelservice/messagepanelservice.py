@@ -1,16 +1,18 @@
 import time
-import daemon
-import json
-
 from trio import run
 from common.definitions import Definitions
-from common.messagehandler import ConfigurationHandler
-from common.messagehandler import DeviceListHandler
+from common.configurationhandler import ConfigurationHandler
+from common.devicelisthandler import DeviceListHandler
 from common.publisher import RegistrationPublisher
+from common.connector import Connector
                 
 # uncomment to behave as daemon
 # with daemon.DaemonContext():
 # comment to behave as daemon
+
+
+
+
 
     
 def setup():
@@ -23,10 +25,13 @@ def setup():
     def on_new_config(config):
         print('messagepanelservice sees new config')
         
-    def on_devicelist_update(devicelist):
+    async def some_async_func():
+        time.sleep(10)
+            
         
-        print('messagepanelservice sees new devicelist')
-    
+    def on_devicelist_update(devicelist):
+        pass
+        
     # listener for configuration updates
     config_handler = ConfigurationHandler( on_new_config)
     run(config_handler.start)
