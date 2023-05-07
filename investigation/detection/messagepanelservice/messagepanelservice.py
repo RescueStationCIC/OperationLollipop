@@ -30,7 +30,7 @@ def setup():
             
         
     def on_devicelist_update(devicelist):
-        pass
+        print('messagepanelservice sees new devices')
         
     # listener for configuration updates
     config_handler = ConfigurationHandler( on_new_config)

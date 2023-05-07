@@ -10,8 +10,8 @@ class DeviceDefinition:
 
 class DeviceScan:
     def __init__(self, list:list[DeviceDefinition]=[], additions:list[DeviceDefinition]=[], removals:list[DeviceDefinition]=[]):
-        self.list:list[DeviceDefinition] = list
-        self.additions:list[DeviceDefinition] = additions
-        self.removals:list[DeviceDefinition] = removals
+        self.list = list
+        self.additions = additions
+        self.removals = removals
     
         

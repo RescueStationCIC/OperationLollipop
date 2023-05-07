@@ -46,16 +46,17 @@ class DeviceList():
             ).decode(encoding)
         objects = jc.parse('lsusb', output )
         
-        devices = [DeviceDefinition]
+        definitions:list[DeviceDefinition]=[]
+        additions:list[DeviceDefinition]=[]
+        removals:list[DeviceDefinition]=[]
+            
         
         for object in objects:
-            devices.append(DeviceDefinition(object))
+            definitions.append(DeviceDefinition(object))
         
         incumbents = cls.__instance.data.list
-        additions=[DeviceDefinition]
-        removals=[DeviceDefinition]
-            
-        for incoming in devices:
+
+        for incoming in definitions:
             found = False
             for incumbent in incumbents:
                 if incoming.system_id ==  incumbent.system_id: 
@@ -66,19 +67,17 @@ class DeviceList():
                 
         for incumbent in incumbents:
             found = False
-            for incoming in devices:
-                if incoming['id'] ==  incumbent['id']: # reconnected USB devices get same id 
+            for incoming in definitions:
+                if incoming.system_id ==  incumbent.system_id:
                     found = True
                     break  
             if (found == False):
                 removals.append(incoming)
                          
-        cls.__instance.data.list = devices
-        cls.__instance.data.additions = additions
-        cls.__instance.data.removals = removals
+        cls.__instance.data = DeviceScan(definitions,additions, removals)
         
-        str_debug = jsonpickle.encode(cls.__instance.data, indent=2)
-        print (str_debug)
+        #str_debug = jsonpickle.encode(cls.__instance.data, indent=2)
+        #print (str_debug)
                 
         return cls
     
