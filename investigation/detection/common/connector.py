@@ -2,11 +2,13 @@ import usb
 import time
 import random
 import logging
-
+from trio import run
 from common.definitions import Definitions
 from common.deviceprobe import ConnectorError
 from common.deviceprobe import DeviceProbe
 from common.deviceprobe import ConnectedDevice
+from common.connectionpublisher import ConnectionPublisher
+from common.connectionhandler import ConnectionHandler
 from common.device import DeviceDefinition
 from common.device import DeviceScan
 
@@ -65,9 +67,20 @@ class ConnectorManager:
         self.connectors:dict={}
         self.scan_queue:list[DeviceScan]=[]
         self.processing_scans:bool = False
+        self.publisher:ConnectionPublisher = ConnectionPublisher('connection manager')
+        self.connectionHandler = ConnectionHandler(self.on_new_connection)
+        self.current_connection_attempt:Connector = None 
 
     def createConnector(self, device_definition:DeviceDefinition) -> Connector:
         raise NotImplementedError
+    
+
+    def on_new_connection(self,system_id):
+        if(self.current_connection_attempt is not None):
+            if(self.current_connection_attempt.connection.device_definition.system_id == system_id):
+                # someone bagged this already!
+                self.current_connection_attempt.disconnect()
+        
 
     async def handle_additions(self,scan:DeviceScan):
         definitions:list[DeviceDefinition] = scan.additions
@@ -89,6 +102,7 @@ class ConnectorManager:
             try: 
                 await connector.connect()
                 self.connectors[definition.system_id] = connector
+                self.publisher.publish(definition)
             except ConnectorError as e: 
                 logging.warning("connection failed: " + self.connection.device_definition.system_id + " : " + e)            
         
