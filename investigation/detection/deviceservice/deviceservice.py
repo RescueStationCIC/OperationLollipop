@@ -1,8 +1,13 @@
 from trio import run
 from common.definitions import Definitions
 from common.configurationhandler import ConfigurationHandler
+from common.connector import ConnectionDefinition
+from common.connectionhandler import ConnectionHandler
 from common.publisher import Publisher
-from common.publisher import RegistrationPublisher
+from common.registration import RegistrationDefinition
+from common.registrationpublisher import RegistrationPublisher
+from common.registrationhandler import RegistrationHandler
+
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -10,7 +15,7 @@ from watchdog.events import FileSystemEventHandler
 from deviceservice.devicelist import DeviceList
  
 # deviceservice is central point for:
-# * recording connected USB hardware: system_id (bus:device:product:vendor)
+# * recording connected USB hardware: device_full_id (bus:device:product:vendor)
 # * recording the association of the hardware with a service
 #
 # when USB hardware is connected, services are notified on the DEVICESCAN channel
@@ -92,16 +97,31 @@ def setup():
     #
     
     def on_new_config(config):
-        publish_devices('devices published on new config')
-        
+        pass # nothin relevent yet!
     
+    # other subscribers can choose to ignore this using the filter.
+    def on_new_registration(registration_definition:RegistrationDefinition):
+        service_name= registration_definition.name
+        publish_devices('devices published on registration. Target: ' + service_name, service_name=service_name)
+    
+    # broadcast. all subscribers need to respond    
+    def on_new_connection(connection_definition:ConnectionDefinition):
+        DeviceList.add_connection(connection_definition)
+        publish_devices(reason='devices published on new connection', service_name=None)
+        
     
     # listener for configuration updates
     config_handler = ConfigurationHandler(on_new_config)
     run(config_handler.start)
     
+    connection_handler = ConnectionHandler(on_new_connection)
+    run(connection_handler.start) 
+    
     # tell everyone (but mostly the configuration service) we're alive
     RegistrationPublisher(Definitions.SERVICENAME_DEVICE).prepare().publish()
+    
+    registration_handler = RegistrationHandler(on_new_registration)
+    run(registration_handler.start)
     
     print('deviceservice setup complete')
         

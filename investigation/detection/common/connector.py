@@ -13,6 +13,11 @@ from common.device import DeviceDefinition
 from common.device import DeviceScan
 
 
+class ConnectionDefinition:
+    def __init__(self, device_full_id:str, owner_name:str):
+        self.owner_name:str = owner_name
+        self.device_full_id:str = device_full_id
+
 class Connector():
 
     def __init__(self, device_definition:DeviceDefinition):
@@ -43,19 +48,19 @@ class Connector():
         self.cancel_requested = False
             
      
-    async def disconnect(self):
+    def disconnect(self):
         if(self.connection is None):
             self.cancel_requested = True
         else:
             try:
                 self.connection.device.reset()
             except usb.core.USBError as e:
-                logging.warning("exception, trying to close: " + self.connection.device_definition.system_id + " : " + e)
+                logging.warning("exception, trying to close: " + self.connection.device_definition.device_full_id + " : " + e)
             
             try:
                 usb.util.dispose_resources(self.connection.device)
             except usb.core.USBError as e: 
-                logging.warning("exception on disposing: " + self.connection.device_definition.system_id + " : " + e)
+                logging.warning("exception on disposing: " + self.connection.device_definition.device_full_id + " : " + e)
             
             self.connection = None
             
@@ -67,71 +72,92 @@ class ConnectorManager:
         self.connectors:dict={}
         self.scan_queue:list[DeviceScan]=[]
         self.processing_scans:bool = False
-        self.publisher:ConnectionPublisher = ConnectionPublisher('connection manager')
+        self.cancel_current_scan:bool = False
+        self.publisher:ConnectionPublisher = ConnectionPublisher(self.getName())
         self.connectionHandler = ConnectionHandler(self.on_new_connection)
         self.current_connection_attempt:Connector = None 
 
     def createConnector(self, device_definition:DeviceDefinition) -> Connector:
         raise NotImplementedError
     
-
-    def on_new_connection(self,system_id):
+    def getName(self) -> str:
+        raise NotImplementedError
+    
+    def cancel_current_connection_attempts(self):
         if(self.current_connection_attempt is not None):
-            if(self.current_connection_attempt.connection.device_definition.system_id == system_id):
-                # someone bagged this already!
-                self.current_connection_attempt.disconnect()
+           self.current_connection_attempt.disconnect()
+
+    def on_new_connection(self,device_full_id):
+        if(self.current_connection_attempt.connection.device_definition.device_full_id == device_full_id):
+            self.cancel_active_connection_attempts()
+
         
 
-    async def handle_additions(self,scan:DeviceScan):
-        definitions:list[DeviceDefinition] = scan.additions
-        if(self.connectors.len == 0):
-            # we've probably just started. Process everything
-           definitions = scan.list
+    async def handle_additions(self,definitions:list[DeviceDefinition]):
         for definition in definitions:
-            # safety: check to see if we have an incumbent. It will need removing
-            incumbent: Connector = self.connectors[definition.system_id]
-            if (incumbent is not None):
-                logging.warning("found unexpected incumbent: " + definition.system_id)
-                try:
-                    incumbent.disconnect()
-                except Exception as e: 
-                    logging.warning("unexpected exception on disposing: " + definition.system_id + " : " + e)
-                self.connectors.pop(definition.system_id)
-                
-            connector:Connector = self.createConnector(definition)
-            try: 
-                await connector.connect()
-                self.connectors[definition.system_id] = connector
-                self.publisher.publish(definition)
-            except ConnectorError as e: 
-                logging.warning("connection failed: " + self.connection.device_definition.system_id + " : " + e)            
-        
-
-    async def handle_removals(self, scan:DeviceScan):
-        definitions:list[DeviceDefinition] = scan.list
-        if(self.connectors.len > 0):
-            logging.warning("connectors are empty, but " + definitions.count + "have been removed. Has the service just started?")
-        else:     
-            for definition in definitions:
-                incumbent: Connector = self.connectors[definition.system_id]
+            if (self.cancel_current_scan == False):
+                # safety: check to see if we have an incumbent. It will need removing
+                incumbent: Connector = self.connectors[definition.device_full_id]
                 if (incumbent is not None):
+                    logging.warning("found unexpected incumbent: " + definition.device_full_id)
                     try:
                         incumbent.disconnect()
                     except Exception as e: 
-                        logging.warning("unexpected exception on disposing: " + definition.system_id + " : " + e)
-                    self.connectors.pop(definition.system_id)
+                        logging.warning("unexpected exception on disposing: " + definition.device_full_id + " : " + e)
+                    self.connectors.pop(definition.device_full_id)
+                    
+                connector:Connector = self.createConnector(definition)
+                try: 
+                    await connector.connect()
+                    self.connectors[definition.device_full_id] = connector
+                    self.publisher.publish(ConnectionDefinition(device_full_id=definition.device_full_id, owner_name=self.getName()))
+                except ConnectorError as e: 
+                    logging.warning("connection failed: " + self.connection.device_definition.device_full_id + " : " + e)            
+        
 
-    async def processScans(self):
-        self.processing_scans = True
-        while (self.scan_queue.len > 0):
-            scan:DeviceScan = self.scan_queue[0]
-            self.scan_queue.remove[0]
-            await self.handle_additions(scan)
-            await self.handle_removals(scan)
+    def handle_removals(self, definitions:list[DeviceDefinition]):
+        for definition in definitions:
+            incumbent: Connector = self.connectors[definition.device_full_id]
+            if (incumbent is not None):
+                try:
+                    incumbent.disconnect()
+                except Exception as e: 
+                    logging.warning("unexpected exception on disposing: " + definition.device_full_id + " : " + e)
+                self.connectors.pop(definition.device_full_id)
+
+    async def process_scans(self):
+        if(self.processing_scans == False):
+            self.processing_scans = True
+            while (self.scan_queue.len > 0):
+                scan:DeviceScan = self.scan_queue[0]
+                self.scan_queue.remove[0]
+                await self.handle_additions(scan.additions)
+                self.handle_removals(scan.removals)
+            self.processing_scans = False
                 
 
-    def receive_device_scan(self, scan:DeviceScan):
-        self.scanQueue.append(scan)
-        if (self.processingScans == False):
-            run(self.processScans)
+    def receive_device_scan(self, scan:DeviceScan, filter):
+        # process
+        if(filter is None):
+            # notification is a broadcast - this is done when devices are added or removed
+            # only process this when we have completed first update after registration.
+            if(self.registration_scan_complete == True):
+                self.scanQueue.append(scan)
+                run(self.process_scans)
+        else:
+            if(filter == self.getName()):
+                if(self.registration_scan_complete == False):
+                    # notification is especially for us. 
+                    # only handle once, when we have just registered.
+                    self.handle_additions(scan.list)
+                    self.registration_scan_complete = True
+                    
+
+            
+            
+        
+            
+            
+
+                
 

@@ -27,12 +27,12 @@ def setup():
     # holds variable config changes reported over Publish and Subscribe
     Config.create(Definitions.PATH_CONFIG)
     
-    def publish_config(reason: str):
+    def publish_config(reason: str, filter: str):
         print (reason)
-        publisher.publish(Config.read().data())
+        publisher.publish(data=Config.read().data(), filter=filter )
 
     def on_new_registration(object:dict):
-        publish_config("regsitration: " + object['name'])
+        publish_config(reason="regsitration: " + object['name'], filter=object['name'])
         
     
     # create config publisher

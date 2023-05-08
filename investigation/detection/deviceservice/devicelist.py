@@ -6,6 +6,7 @@ import jsonpickle
 from common.definitions import Definitions
 from common.device import DeviceDefinition
 from common.device import DeviceScan
+from common.connector import ConnectionDefinition
 class DeviceList():
     
     __create_key = object()
@@ -46,9 +47,13 @@ class DeviceList():
             ).decode(encoding)
         objects = jc.parse('lsusb', output )
         
+        # completely refresh the scan data
         definitions:list[DeviceDefinition]=[]
         additions:list[DeviceDefinition]=[]
         removals:list[DeviceDefinition]=[]
+        
+        # but connections are added by another mechanism - we can only remove them here
+        connections:dict = cls.__instance.data.connections
             
         
         for object in objects:
@@ -59,27 +64,34 @@ class DeviceList():
         for incoming in definitions:
             found = False
             for incumbent in incumbents:
-                if incoming.system_id ==  incumbent.system_id: 
+                if incoming.device_full_id ==  incumbent.device_full_id: 
                     found = True
                     break  
             if (found == False):
+                connections.pop(incumbent.device_full_id)
                 additions.append(incoming)
                 
         for incumbent in incumbents:
             found = False
             for incoming in definitions:
-                if incoming.system_id ==  incumbent.system_id:
+                if incoming.device_full_id ==  incumbent.device_full_id:
                     found = True
                     break  
             if (found == False):
+                connections.pop(incoming)
                 removals.append(incoming)
                          
-        cls.__instance.data = DeviceScan(definitions,additions, removals)
+        cls.__instance.data = DeviceScan(definitions,connections, additions, removals)
         
         #str_debug = jsonpickle.encode(cls.__instance.data, indent=2)
         #print (str_debug)
                 
         return cls
+    
+    @classmethod
+    def add_connection(connection_definition: ConnectionDefinition):
+        cls.__instance.data.connections[connection_definition.device_full_id]=connection_definition.owner_name
+    
     
     @classmethod  
     def data(cls):

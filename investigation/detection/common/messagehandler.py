@@ -1,8 +1,8 @@
 import uuid
-import json
-
 import paho.mqtt.client as mqtt
+import jsonpickle
 from common.definitions import Definitions
+from common.pubsubmessagedefinition import PubSubMessageDefinition
           
 class MessageHandler:
 
@@ -44,12 +44,12 @@ class MessageHandler:
 
         
     def on_message(self, client, userdata, message,tmp=None):
-    
-        object = json.loads(message.payload.decode(self.encoding))
-        self.on_new_data(object)
+        message_definition: PubSubMessageDefinition = jsonpickle.decode(message)
+        self.on_new_data(message_definition.data, message_definition.filter)
         
-    def on_new_data(self, object):
-        print (object)  
+    def on_new_data(self, object, filter):
+        print (object)
+        print (filter)  
             
 
 

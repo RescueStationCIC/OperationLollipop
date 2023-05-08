@@ -165,7 +165,10 @@ class MessagePanelConnector(Connector):
 class MessagePanelManager (ConnectorManager): 
     def __init__(self, device_definition:DeviceDefinition):
         super().__init__(self, device_definition)
-        
+    
+    def getName(self): 
+        return 'message_panel_manager' 
+    
     def createConnector(self, device_definition:DeviceDefinition) -> Connector:
         return MessagePanelConnector(device_definition)
 

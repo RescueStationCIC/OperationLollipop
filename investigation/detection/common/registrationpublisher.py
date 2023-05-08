@@ -1,11 +1,13 @@
 from common.publisher import Publisher
 from common.definitions import Definitions
+from common.registration import RegistrationDefinition
 
 class RegistrationPublisher(Publisher):
-    def __init__(self, name:str):
+    def __init__(self, registration_definition: RegistrationDefinition):
         Publisher.__init__(self, Definitions.TOPIC_REGISTRATION)
-        self.name = name
+        self.registration_definition: RegistrationDefinition = registration_definition
+        
         
     def publish(self):
-        Publisher.publish(self,{'name':self.name})
+        Publisher.publish(self,self.registration_definition)
     

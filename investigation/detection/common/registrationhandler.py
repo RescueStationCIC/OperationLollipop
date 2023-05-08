@@ -1,9 +1,9 @@
 from common.messagehandler import MessageHandler
 from common.definitions import Definitions
-
+from common.registration import RegistrationDefinition
 class RegistrationHandler(MessageHandler):
     
-    def on_new_data(self,object):
+    def on_new_data(self, object:RegistrationDefinition, filter):
         self.on_new_registration(object)
      
     def __init__(self, on_new_registration):

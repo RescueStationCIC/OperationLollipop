@@ -3,6 +3,7 @@ import time
 import uuid
 import paho.mqtt.client as mqtt
 from common.definitions import Definitions
+from common.pubsubmessagedefinition import PubSubMessageDefinition
 
 
 class Publisher:
@@ -34,8 +35,9 @@ class Publisher:
         
         return self
         
-    def publish(self,object):
-        msg = jsonpickle.encode(object) #.encode(self.encoding)
+    def publish(self,object, filter:str):
+        message_definition=PubSubMessageDefinition(object, filter)
+        msg = jsonpickle.encode(message_definition) #.encode(self.encoding)
         self.publisher.publish(self.topic, payload=msg, qos=0, retain=False)
     
         
