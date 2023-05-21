@@ -2,14 +2,14 @@ import usb
 import time
 import logging
 from common.definitions import Definitions
-from common.device import DeviceDefinition
-from common.device import DeviceScan
+from common.devicedefinition import DeviceDefinition
+from common.devicescan import DeviceScan
 from common.deviceprobe import DeviceProbe
-from common.deviceprobe import ConnectorError
+from common.deviceprobe import ConnectionError
 from common.connector import Connector
 from common.connector import ConnectorManager
 
-from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEndpoints, DeviceProbe
+from common.deviceprobe import ConnectedDevice, DeviceEndpoints, DeviceProbe
 
 
 # Example output from lsusb -v:
@@ -108,8 +108,8 @@ from investigation.detection.common.deviceprobe import ConnectedDevice, DeviceEn
 
 
 class MessagePanelDeviceProbe(DeviceProbe):
-    def __init__(self,device_definition:DeviceDefinition): 
-        super().__init__(self)
+    def __init__(self): 
+        super().__init__()
         
     def isDeviceTypeRecognised(full_device):
         # check device class:
@@ -156,21 +156,13 @@ class MessagePanelDeviceProbe(DeviceProbe):
 
 class MessagePanelConnector(Connector):
     def __init__(self, device_definition:DeviceDefinition):
-        super().__init__(self, device_definition)
+        super().__init__(device_definition)
         
-    def getProbe(self, device_definition: DeviceDefinition) -> DeviceProbe:
-        return MessagePanelDeviceProbe(self.device_definition)
+    def create_probe(self) -> DeviceProbe:
+        return MessagePanelDeviceProbe()
 
 
-class MessagePanelManager (ConnectorManager): 
-    def __init__(self, device_definition:DeviceDefinition):
-        super().__init__(self, device_definition)
-    
-    def getName(self): 
-        return 'message_panel_manager' 
-    
-    def createConnector(self, device_definition:DeviceDefinition) -> Connector:
-        return MessagePanelConnector(device_definition)
+
 
             
     

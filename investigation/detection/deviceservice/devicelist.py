@@ -4,8 +4,8 @@ import os.path
 import jc
 import jsonpickle
 from common.definitions import Definitions
-from common.device import DeviceDefinition
-from common.device import DeviceScan
+from common.devicedefinition import DeviceDefinition
+from common.devicescan import DeviceScan
 from common.connector import ConnectionDefinition
 class DeviceList():
     
@@ -45,7 +45,7 @@ class DeviceList():
             ["lsusb"]
 #            ,"-v"
             ).decode(encoding)
-        objects = jc.parse('lsusb', output )
+        parsed_items = jc.parse('lsusb', output )
         
         # completely refresh the scan data
         definitions:list[DeviceDefinition]=[]
@@ -56,30 +56,38 @@ class DeviceList():
         connections:dict = cls.__instance.data.connections
             
         
-        for object in objects:
-            definitions.append(DeviceDefinition(object))
+        for item in parsed_items:
+            definitions.append(DeviceDefinition(item))
         
+        
+        incomings = definitions
         incumbents = cls.__instance.data.list
+        
+        # compare the incomings and incumbents
+        # additions are the incomings which don't exist in the incumbents
+        # removals are the incumbents which dont exist in the incomings
+        # if removals have proper connections, they need to be disconnected. 
 
-        for incoming in definitions:
-            found = False
+        # addtions
+        for incoming in incomings:
+            found = None
             for incumbent in incumbents:
                 if incoming.device_full_id ==  incumbent.device_full_id: 
-                    found = True
+                    found = incoming
                     break  
-            if (found == False):
-                connections.pop(incumbent.device_full_id)
+            if (found is None):
                 additions.append(incoming)
                 
+        # removals        
         for incumbent in incumbents:
-            found = False
-            for incoming in definitions:
+            found = None
+            for incoming in incomings:
                 if incoming.device_full_id ==  incumbent.device_full_id:
-                    found = True
+                    found = incumbent
                     break  
-            if (found == False):
-                connections.pop(incoming)
-                removals.append(incoming)
+            if (found is None):
+                connections.pop(incumbent)
+                removals.append(incumbent)
                          
         cls.__instance.data = DeviceScan(definitions,connections, additions, removals)
         

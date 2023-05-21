@@ -1,6 +1,6 @@
 from common.messagehandler import MessageHandler
 from common.definitions import Definitions
-from common.registration import RegistrationDefinition
+from common.registrationdefinition import RegistrationDefinition
 class RegistrationHandler(MessageHandler):
     
     def on_new_data(self, object:RegistrationDefinition, filter):

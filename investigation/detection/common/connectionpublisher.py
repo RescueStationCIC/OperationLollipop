@@ -1,6 +1,6 @@
 from common.publisher import Publisher
 from common.definitions import Definitions
-from common.connector import ConnectionDefinition
+from common.connectiondefinition import ConnectionDefinition
 
 class ConnectionPublisher(Publisher):
     def __init__(self, name:str):
@@ -8,4 +8,4 @@ class ConnectionPublisher(Publisher):
         self.name = name
         
     def publish(self, connection_definition:ConnectionDefinition):
-        Publisher.publish(self, connection_definition)
+        Publisher.publish(self, connection_definition, self.name)

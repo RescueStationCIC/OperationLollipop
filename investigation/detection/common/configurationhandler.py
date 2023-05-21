@@ -3,7 +3,7 @@ from common.definitions import Definitions
 
 class ConfigurationHandler(MessageHandler):
     
-    def on_new_data(self, object):
+    def on_new_data(self, object, filter):
         self.on_new_config(object)
     
     def __init__(self, on_new_config):

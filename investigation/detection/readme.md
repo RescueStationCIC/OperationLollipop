@@ -28,7 +28,7 @@ service checks to see if the USB device has been claimed yet.
 If the device has not been claimed, the service claims it and performs its probe. 
     If the probe succeeds the service will register it with the deviceservice.
     If the probe fails, the service will release the device
-On receiving a registration (UBS ID, servicename), the deviceservice will emit a device update event, in which the usb device id is no registered to a servicename.
+On receiving a registration (UBS ID, servicename), the deviceservice will emit a device update event, in which the usb device id is now registered to a servicename.
 If the usb device has been claimed, the service will wait a random time (less than 1 second) and will attemtp to claim the device again. 
 If the service recieves a deviceservice device update event, it will check to see if the device it is attemtping to claim has been registered. 
     If the device has been registered, the service will stop claim attempts.

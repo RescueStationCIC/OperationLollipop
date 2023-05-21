@@ -1,6 +1,6 @@
 from common.publisher import Publisher
 from common.definitions import Definitions
-from common.registration import RegistrationDefinition
+from common.registrationdefinition import RegistrationDefinition
 
 class RegistrationPublisher(Publisher):
     def __init__(self, registration_definition: RegistrationDefinition):
@@ -9,5 +9,5 @@ class RegistrationPublisher(Publisher):
         
         
     def publish(self):
-        Publisher.publish(self,self.registration_definition)
+        Publisher.publish(self,self.registration_definition, filter=None)
     

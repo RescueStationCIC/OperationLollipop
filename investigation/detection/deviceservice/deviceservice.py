@@ -4,7 +4,7 @@ from common.configurationhandler import ConfigurationHandler
 from common.connector import ConnectionDefinition
 from common.connectionhandler import ConnectionHandler
 from common.publisher import Publisher
-from common.registration import RegistrationDefinition
+from common.registrationdefinition import RegistrationDefinition
 from common.registrationpublisher import RegistrationPublisher
 from common.registrationhandler import RegistrationHandler
 
@@ -69,9 +69,9 @@ def setup():
     
     
     # reads and publishes the current device list
-    def publish_devices(reason: str):
-        print (reason)
-        devicelist_publisher.publish(DeviceList.read().data())
+    # interested parties can filter
+    def publish_devices(reason: str, filter):
+        devicelist_publisher.publish(DeviceList.read().data(), filter)
     
     # the PUB SUB publisher of the device list
     devicelist_publisher = Publisher(Definitions.TOPIC_DEVICESCAN)
@@ -102,12 +102,12 @@ def setup():
     # other subscribers can choose to ignore this using the filter.
     def on_new_registration(registration_definition:RegistrationDefinition):
         service_name= registration_definition.name
-        publish_devices('devices published on registration. Target: ' + service_name, service_name=service_name)
+        publish_devices('devices published on registration. Target: ' + service_name, service_name)
     
     # broadcast. all subscribers need to respond    
     def on_new_connection(connection_definition:ConnectionDefinition):
         DeviceList.add_connection(connection_definition)
-        publish_devices(reason='devices published on new connection', service_name=None)
+        publish_devices('devices published on new connection', None)
         
     
     # listener for configuration updates
@@ -118,7 +118,7 @@ def setup():
     run(connection_handler.start) 
     
     # tell everyone (but mostly the configuration service) we're alive
-    RegistrationPublisher(Definitions.SERVICENAME_DEVICE).prepare().publish()
+    RegistrationPublisher(RegistrationDefinition(Definitions.SERVICENAME_DEVICE)).prepare().publish()
     
     registration_handler = RegistrationHandler(on_new_registration)
     run(registration_handler.start)

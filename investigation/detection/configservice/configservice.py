@@ -10,6 +10,7 @@ from .config import Config
 from common.definitions import Definitions
 from common.publisher import Publisher
 from common.registrationhandler import RegistrationHandler
+from common.registrationdefinition import RegistrationDefinition
 
 class ConfigChangeHandler(FileSystemEventHandler):
     
@@ -31,8 +32,8 @@ def setup():
         print (reason)
         publisher.publish(data=Config.read().data(), filter=filter )
 
-    def on_new_registration(object:dict):
-        publish_config(reason="regsitration: " + object['name'], filter=object['name'])
+    def on_new_registration(registration_definition:RegistrationDefinition):
+        publish_config(reason="regsitration: " + registration_definition.name, filter=registration_definition.name)
         
     
     # create config publisher

@@ -2,6 +2,7 @@ import uuid
 import paho.mqtt.client as mqtt
 import jsonpickle
 from common.definitions import Definitions
+from common.error import GeneralError
 from common.pubsubmessagedefinition import PubSubMessageDefinition
           
 class MessageHandler:
@@ -44,12 +45,11 @@ class MessageHandler:
 
         
     def on_message(self, client, userdata, message,tmp=None):
-        message_definition: PubSubMessageDefinition = jsonpickle.decode(message)
+        message_definition: PubSubMessageDefinition = jsonpickle.decode(message.payload)
         self.on_new_data(message_definition.data, message_definition.filter)
         
-    def on_new_data(self, object, filter):
-        print (object)
-        print (filter)  
+    def on_new_data(self, data, filter):
+        raise GeneralError(GeneralError.Definition.NOT_IMPLEMENTED,"implement this in the subclass")
             
 
 
