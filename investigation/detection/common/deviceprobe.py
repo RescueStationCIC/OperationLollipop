@@ -49,7 +49,7 @@ class DeviceProbe:
     
     async def connectIfRecognised(self, device_definition:DeviceDefinition) -> ConnectedDevice:
         result = ConnectedDevice(device_definition)
-        result.deivce = usb.core.find(idVendor=device_definition.id_vendor, idProduct=device_definition.id_product, bus=device_definition.bus, address=device_definition.address)
+        result.device = usb.core.find(idVendor=device_definition.id_vendor, idProduct=device_definition.id_product, bus=device_definition.bus, address=device_definition.address)
         
         if(result.device is None):
             raise ConnectionError(result, ConnectionError.Definition.NO_DEVICE_FOR_DEFINITION)
@@ -72,6 +72,8 @@ class DeviceProbe:
                         usb.util.release_interface(result.device, result.interface)
                         result.claimed = False
                         raise
+            else:
+                raise ConnectionError(result, ConnectionError.Definition.DEVICE_CLASS_NOT_RECOGNISED)
         return result
             
         

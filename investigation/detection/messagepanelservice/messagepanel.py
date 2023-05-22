@@ -109,9 +109,9 @@ from common.deviceprobe import ConnectedDevice, DeviceEndpoints, DeviceProbe
 
 class MessagePanelDeviceProbe(DeviceProbe):
     def __init__(self): 
-        super().__init__()
+        DeviceProbe.__init__(self)
         
-    def isDeviceTypeRecognised(full_device):
+    def isDeviceClassRecognised(self,usb_device:usb.Device):
         # check device class:
         #   bDeviceClass            2 Communications
         # check interfaces for:
@@ -119,22 +119,22 @@ class MessagePanelDeviceProbe(DeviceProbe):
         #       bInterfaceSubClass      2 Abstract (modem)
         #       bInterfaceProtocol      1 AT-commands (v.25ter)
         
-        return full_device.deviceClass == Definitions.USB_DEVICE_CLASS_COMMS 
+        return usb_device.bDeviceClass == Definitions.USB_DEVICE_CLASS_COMMS 
 
-    def getInterface(full_device:usb.Device)-> usb.Interface:
+    def getInterface(self,usb_device:usb.Device)-> usb.Interface:
         result = None
-        for c in full_device.configurations:
+        for c in usb_device.configurations():
             configuration:usb.Configuration = c
-            for i in configuration.interfaces:
+            for i in configuration.interfaces():
                 interface:usb.Interface = i
-                if((interface.interfaceClass == Definitions.USB_INTERFACE_CLASS_COMMS) and
-                  (interface.interfaceSubClass == Definitions.USB_INTERFACE_SUBCLASS_MODEM) and
-                  (interface.interfaceProtocol == Definitions.USB_INTERFACE_PROTOCOL_AT)):
+                if((interface.bInterfaceClass == Definitions.USB_INTERFACE_CLASS_COMMS) and
+                  (interface.bInterfaceSubClass == Definitions.USB_INTERFACE_SUBCLASS_MODEM) and
+                  (interface.bInterfaceProtocol == Definitions.USB_INTERFACE_PROTOCOL_AT)):
                     result = interface
                     break
         return result 
     
-    def getEndpoints(self, device: usb.Device, interface: usb.Interface) -> DeviceEndpoints:
+    def getEndpoints(self, usb_device: usb.Device, interface: usb.Interface) -> DeviceEndpoints:
         result:DeviceEndpoints = DeviceEndpoints()
         
         result.e_in = usb.util.find_descriptor(
