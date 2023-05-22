@@ -53,7 +53,8 @@ class DeviceListChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
         
         if (event.key[2] == True):
-           self.on_device_list_modified("device list modified")
+           #self.on_device_list_modified( reason="device list modified",filter=None)
+           pass # FOR NOW!!
 
     
 def setup():
